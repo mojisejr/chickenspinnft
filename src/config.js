@@ -5,17 +5,17 @@ const { NETWORK } = require(`${basePath}/constants/network.js`);
 const network = NETWORK.eth;
 
 // General metadata for Ethereum
-const namePrefix = "Your Collection";
-const description = "Remember to replace this description";
-const baseUri = "ipfs://NewUriToReplace";
+const namePrefix = "PunkKub";
+const description = "";
+const baseUri = "ipfs://";
 
 const solanaMetadata = {
-  symbol: "YC",
+  symbol: "",
   seller_fee_basis_points: 1000, // Define how much % you want from secondary market sales 1000 = 10%
-  external_url: "https://www.youtube.com/c/hashlipsnft",
+  external_url: "",
   creators: [
     {
-      address: "7fXNuer5sbZtaTEPhtJ5g5gNtuyRoKkvxdjEjEnPN4mC",
+      address: "",
       share: 100,
     },
   ],
@@ -24,15 +24,15 @@ const solanaMetadata = {
 // If you have selected Solana then the collection starts from 0 automatically
 const layerConfigurations = [
   {
-    growEditionSizeTo: 5,
+    growEditionSizeTo: 300,
     layersOrder: [
       { name: "Background" },
-      { name: "Eyeball" },
-      { name: "Eye color" },
-      { name: "Iris" },
-      { name: "Shine" },
-      { name: "Bottom lid" },
-      { name: "Top lid" },
+      { name: "Skin" },
+      { name: "Eyes" },
+      { name: "Suits" },
+      { name: "Mouths" },
+      { name: "Hats" },
+      { name: "Earrings" },
     ],
   },
 ];
@@ -42,9 +42,9 @@ const shuffleLayerConfigurations = false;
 const debugLogs = false;
 
 const format = {
-  width: 512,
-  height: 512,
-  smoothing: false,
+  width: 1080,
+  height: 1080,
+  smoothing: true,
 };
 
 const gif = {
@@ -73,12 +73,31 @@ const pixelFormat = {
 
 const background = {
   generate: true,
-  brightness: "80%",
+  brightness: "90%",
   static: false,
   default: "#000000",
 };
 
-const extraMetadata = {};
+const extraMetadata = {
+  attributes: [
+    {
+      trait_type: "str",
+      value: 3,
+    },
+    {
+      trait_type: "agi",
+      value: 9,
+    },
+    {
+      trait_type: "vit",
+      value: 1,
+    },
+    {
+      trait_type: "int",
+      value: 3,
+    },
+  ],
+};
 
 const rarityDelimiter = "#";
 
