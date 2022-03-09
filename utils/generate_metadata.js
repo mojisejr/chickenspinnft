@@ -11,6 +11,7 @@ const {
   baseUri,
 } = require(`${basePath}/src/config.js`);
 const console = require("console");
+const { randomInt } = require("crypto");
 const canvas = createCanvas(format.width, format.height);
 const ctx = canvas.getContext("2d");
 const metadataList = [];
@@ -57,65 +58,66 @@ const draw = (_imgObject) => {
 };
 
 const addRarity = () => {
-  let w = canvas.width;
-  let h = canvas.height;
-  let i = -4;
-  let count = 0;
-  let imgdata = ctx.getImageData(0, 0, w, h);
-  let rgb = imgdata.data;
-  let newRgb = { r: 0, g: 0, b: 0 };
-  const tolerance = 15;
-  const rareColorBase = "NOT a Hot Dog";
-  const rareColor = [
-    { name: "Hot Dog", rgb: { r: 192, g: 158, b: 131 } },
-    { name: "Hot Dog", rgb: { r: 128, g: 134, b: 90 } },
-    { name: "Hot Dog", rgb: { r: 113, g: 65, b: 179 } },
-    { name: "Hot Dog", rgb: { r: 162, g: 108, b: 67 } },
-  ];
+  const str = randomStatusFor(3);
+  const agi = randomStatusFor(3);
+  const vit = randomStatusFor(3);
+  const int = randomStatusFor(3);
 
-  while ((i += 10 * 4) < rgb.length) {
-    ++count;
-    newRgb.r += rgb[i];
-    newRgb.g += rgb[i + 1];
-    newRgb.b += rgb[i + 2];
-  }
-
-  newRgb.r = ~~(newRgb.r / count);
-  newRgb.g = ~~(newRgb.g / count);
-  newRgb.b = ~~(newRgb.b / count);
-
-  let rarity = rareColorBase;
-
-  rareColor.forEach((color) => {
-    if (isNeighborColor(newRgb, color.rgb, tolerance)) {
-      rarity = color.name;
-    }
-  });
-
-  console.log(newRgb);
-  console.log(rarity);
-
-  return [
+  const rarityObject = [
     {
-      trait_type: "average color",
-      value: `rgb(${newRgb.r},${newRgb.g},${newRgb.b})`,
+      trait_type: "STR",
+      value: str,
     },
     {
-      trait_type: "What is this?",
-      value: rarity,
+      trait_type: "AGI",
+      value: agi,
     },
     {
-      trait_type: "date",
-      value: randomIntFromInterval(1500, 1900),
+      trait_type: "VIT",
+      value: vit,
+    },
+    {
+      trait_type: "INT",
+      value: int,
     },
   ];
+
+  console.log("random status object", rarityObject);
+
+  return rarityObject;
 };
 
-randomIntFromInterval = (min, max) => {
+const randomStatusFor = (rarity) => {
+  //0 = common
+  //1 = rare
+  //2 = epic
+  //3 = legendary
+  //4 = dark
+  switch (rarity) {
+    case 0: {
+      return randomIntFromInterval(1, 3);
+    }
+    case 1: {
+      return randomIntFromInterval(1, 5);
+    }
+    case 2: {
+      return randomIntFromInterval(2, 7);
+    }
+    case 3: {
+      return randomIntFromInterval(2, 9);
+    }
+    case 4: {
+      return randomIntFromInterval(3, 9);
+    }
+  }
+};
+
+//random number
+const randomIntFromInterval = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
-isNeighborColor = (color1, color2, tolerance) => {
+const isNeighborColor = (color1, color2, tolerance) => {
   return (
     Math.abs(color1.r - color2.r) <= tolerance &&
     Math.abs(color1.g - color2.g) <= tolerance &&
@@ -138,8 +140,10 @@ const saveMetadata = (_loadedImageObject) => {
     image: `${baseUri}/${shortName}.png`,
     edition: Number(shortName),
     attributes: tempAttributes,
-    compiler: "HashLips Art Engine",
+    hash_tags: ["PunkKub", "PunkKubNFT", "BITKUB", "Pixel art"],
+    compiler: "PunkKub Compiler V1.0",
   };
+
   fs.writeFileSync(
     `${buildDir}/${shortName}.json`,
     JSON.stringify(tempMetadata, null, 2)

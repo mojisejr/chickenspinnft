@@ -6,7 +6,10 @@ const network = NETWORK.eth;
 
 // General metadata for Ethereum
 const namePrefix = "PunkKub";
-const description = "";
+const description = `PunkKub คือ functional NFT pixel art profile picture ที่ไม่ซ้ำกันเลยจำนวน 2,222 รูป. มีระด้บความหายากถึง 5 ระดับ
+common, rare, epic, legendary และสุดยอด dark ที่มีเพียง 12 ตัวใน collection เท่านั้น พวกเขายังมีความสามารถพื้นฐานในการใช้รับส่วนลด และ รับ
+สิทธิพิเศษต่างๆ จากการเกมส์ ต่างๆ ในอนาตตได้อีกมากมาย !
+`;
 const baseUri = "ipfs://";
 
 const solanaMetadata = {
