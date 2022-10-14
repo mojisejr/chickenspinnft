@@ -50,10 +50,10 @@ build/Release
 # Dependency directories
 
 # build/
-RawLayer/
 dist/
 node_modules/
 jspm_packages/
+RawLayer/
 
 # TypeScript v1 declaration files
 
