@@ -50,6 +50,7 @@ build/Release
 # Dependency directories
 
 # build/
+RawLayer/
 dist/
 node_modules/
 jspm_packages/
