@@ -1,0 +1,59 @@
+{
+  "name": "Your NFT name here #1",
+  "description": "NFT Collection Description here",
+  "image": "https://gateway.pinata.cloud/ipfs/QmW7yrygciiENY3QPsRAU19PHpkL1SbPF1AdoTLtuLquxZ",
+  "dna": "5a92391758c278a04bd1415caca3e6823c16fadf",
+  "edition": "1",
+  "date": 1665717331709,
+  "attributes": [
+    {
+      "trait_type": "Bg 1",
+      "value": "BG_1"
+    },
+    {
+      "trait_type": "Back 2",
+      "value": "BACK_1"
+    },
+    {
+      "trait_type": "Crest 3",
+      "value": "Crest_1"
+    },
+    {
+      "trait_type": "Type 4",
+      "value": "TYPE_1"
+    },
+    {
+      "trait_type": "Tattoo 5",
+      "value": "TATTOO1"
+    },
+    {
+      "trait_type": "Neck 6",
+      "value": "NECK_1"
+    },
+    {
+      "trait_type": "Body 7",
+      "value": "BODY_2"
+    },
+    {
+      "trait_type": "Mouth 8",
+      "value": "MOUTH_2"
+    },
+    {
+      "trait_type": "Scarf 9",
+      "value": "SCRAF_1"
+    },
+    {
+      "trait_type": "Eyes 10",
+      "value": "EYES_1"
+    },
+    {
+      "trait_type": "Head 11",
+      "value": "HEAD_1"
+    },
+    {
+      "trait_type": "Tag 12",
+      "value": "TAG_2"
+    }
+  ],
+  "creator": "N"
+}

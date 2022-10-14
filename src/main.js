@@ -2,7 +2,11 @@ const basePath = process.cwd();
 const { NETWORK } = require(`${basePath}/constants/network.js`);
 const fs = require("fs");
 const sha1 = require(`${basePath}/node_modules/sha1`);
-const { createCanvas, loadImage } = require(`${basePath}/node_modules/canvas`);
+const {
+  createCanvas,
+  loadImage,
+  registerFont,
+} = require(`${basePath}/node_modules/canvas`);
 const buildDir = `${basePath}/build`;
 const layersDir = `${basePath}/layers`;
 const {
@@ -30,6 +34,18 @@ var attributesList = [];
 var dnaList = new Set();
 const DNA_DELIMITER = "-";
 const HashlipsGiffer = require(`${basePath}/modules/HashlipsGiffer.js`);
+
+//CUSTOM
+const {
+  addMintedToken,
+  checkDNA,
+  checkTokenId,
+} = require("../database/services/token.service");
+const {
+  pinImageToPinata,
+  pinMetadataToPinata,
+  pinImageBufferToPinata,
+} = require("../pinata");
 
 let hashlipsGiffer = null;
 
@@ -125,18 +141,18 @@ const drawBackground = () => {
   ctx.fillRect(0, 0, format.width, format.height);
 };
 
-const addMetadata = (_dna, _edition) => {
+const addMetadata = (_dna, _edition, imageUrl = null) => {
   let dateTime = Date.now();
   let tempMetadata = {
     name: `${namePrefix} #${_edition}`,
     description: description,
-    image: `${baseUri}/${_edition}.png`,
+    image: imageUrl == null ? `${baseUri}/${_edition}.png` : imageUrl,
     dna: sha1(_dna),
     edition: _edition,
     date: dateTime,
     ...extraMetadata,
     attributes: attributesList,
-    creator: "PunkKub",
+    creator: "N",
   };
   if (network == NETWORK.sol) {
     tempMetadata = {
@@ -166,6 +182,7 @@ const addMetadata = (_dna, _edition) => {
   }
   metadataList.push(tempMetadata);
   attributesList = [];
+  return tempMetadata;
 };
 
 const addAttributes = (_element) => {
@@ -185,7 +202,8 @@ const loadLayerImg = async (_layer) => {
 
 const addText = (_sig, x, y, size) => {
   ctx.fillStyle = text.color;
-  ctx.font = `${text.weight} ${size}pt ${text.family}`;
+  // ctx.font = `${text.weight} ${size}pt ${text.family}`;
+  ctx.font = `${text.weight} ${size}pt Press Start 2P`;
   ctx.textBaseline = text.baseline;
   ctx.textAlign = text.align;
   ctx.fillText(_sig, x, y);
@@ -327,97 +345,85 @@ function shuffle(array) {
   return array;
 }
 
-const startCreating = async () => {
-  let layerConfigIndex = 0;
-  let editionCount = 1;
-  let failedCount = 0;
-  let abstractedIndexes = [];
-  for (
-    let i = network == NETWORK.sol ? 0 : 1;
-    i <= layerConfigurations[layerConfigurations.length - 1].growEditionSizeTo;
-    i++
-  ) {
-    abstractedIndexes.push(i);
-  }
-  if (shuffleLayerConfigurations) {
-    abstractedIndexes = shuffle(abstractedIndexes);
-  }
+const startCreating = async (tokenId) => {
+  let useableDna = false;
+  let hashedDna = null;
+  let newDna = null;
   debugLogs
     ? console.log("Editions left to create: ", abstractedIndexes)
     : null;
-  while (layerConfigIndex < layerConfigurations.length) {
-    const layers = layersSetup(
-      layerConfigurations[layerConfigIndex].layersOrder
-    );
-    while (
-      editionCount <= layerConfigurations[layerConfigIndex].growEditionSizeTo
-    ) {
-      let newDna = createDna(layers);
-      if (isDnaUnique(dnaList, newDna)) {
-        let results = constructLayerToDna(newDna, layers);
-        let loadedElements = [];
 
-        results.forEach((layer) => {
-          loadedElements.push(loadLayerImg(layer));
-        });
+  //@DEV: check if token is existed!?
+  const canMint = await checkTokenId(tokenId);
+  if (!canMint) {
+    console.log("token id is existed");
+    return;
+  }
 
-        await Promise.all(loadedElements).then((renderObjectArray) => {
-          debugLogs ? console.log("Clearing canvas") : null;
-          ctx.clearRect(0, 0, format.width, format.height);
-          if (gif.export) {
-            hashlipsGiffer = new HashlipsGiffer(
-              canvas,
-              ctx,
-              `${buildDir}/gifs/${abstractedIndexes[0]}.gif`,
-              gif.repeat,
-              gif.quality,
-              gif.delay
-            );
-            hashlipsGiffer.start();
-          }
-          if (background.generate) {
-            drawBackground();
-          }
-          renderObjectArray.forEach((renderObject, index) => {
-            drawElement(
-              renderObject,
-              index,
-              layerConfigurations[layerConfigIndex].layersOrder.length
-            );
-            if (gif.export) {
-              hashlipsGiffer.add();
-            }
-          });
-          if (gif.export) {
-            hashlipsGiffer.stop();
-          }
-          debugLogs
-            ? console.log("Editions left to create: ", abstractedIndexes)
-            : null;
-          saveImage(abstractedIndexes[0]);
-          addMetadata(newDna, abstractedIndexes[0]);
-          saveMetaDataSingleFile(abstractedIndexes[0]);
-          console.log(
-            `Created edition: ${abstractedIndexes[0]}, with DNA: ${sha1(
-              newDna
-            )}`
-          );
-        });
-        dnaList.add(filterDNAOptions(newDna));
-        editionCount++;
-        abstractedIndexes.shift();
-      } else {
-        console.log("DNA exists!");
-        failedCount++;
-        if (failedCount >= uniqueDnaTorrance) {
-          console.log(
-            `You need more layers or elements to grow your edition to ${layerConfigurations[layerConfigIndex].growEditionSizeTo} artworks!`
-          );
-          process.exit();
-        }
-      }
+  //@DEV: setup image layers
+  const layers = layersSetup(layerConfigurations[0].layersOrder);
+
+  //@DEV: if found dupliated one regenerate newDna until found useable one
+  while (!useableDna) {
+    newDna = createDna(layers);
+    hashedDna = sha1(newDna);
+    let dnaNotExist = await checkDNA(hashedDna);
+    if (dnaNotExist) {
+      console.log("found usable dna: ", hashedDna);
+      useableDna = true;
     }
-    layerConfigIndex++;
+  }
+
+  //@DEV: if available dna genreate image !
+  if (useableDna) {
+    await addMintedToken(tokenId, hashedDna);
+    let results = constructLayerToDna(newDna, layers);
+    let loadedElements = [];
+
+    results.forEach((layer) => {
+      loadedElements.push(loadLayerImg(layer));
+    });
+
+    const jsonUrl = await Promise.all(loadedElements).then(
+      async (renderObjectArray) => {
+        debugLogs ? console.log("Clearing canvas") : null;
+        ctx.clearRect(0, 0, format.width, format.height);
+        if (background.generate) {
+          drawBackground();
+        }
+        renderObjectArray.forEach((renderObject, index) => {
+          drawElement(
+            renderObject,
+            index,
+            layerConfigurations[0].layersOrder.length
+          );
+        });
+
+        debugLogs
+          ? console.log("Editions left to create: ", abstractedIndexes)
+          : null;
+
+        saveImage(tokenId);
+        //@DEV: PINATA FILE ADDING
+        //1. Pin Image to PINATA
+        const { imageUrl } = await pinImageToPinata(tokenId);
+        // const { imageUrl } = await pinImageBufferToPinata(
+        //   tokenId,
+        //   canvas.toBuffer("image/png")
+        // );
+        //2. Get Image URL back and Build Metadata
+        const metadata = addMetadata(newDna, tokenId, imageUrl);
+        //3. Pin Json to PINATA
+        const { jsonUrl } = await pinMetadataToPinata(tokenId, metadata);
+        //4. return jsonURL back to etherjs
+        console.log(jsonUrl);
+        console.log(`Created edition: ${tokenId}, with DNA: ${sha1(newDna)}`);
+        saveMetaDataSingleFile(tokenId);
+        return jsonUrl;
+      }
+    );
+    dnaList.add(filterDNAOptions(newDna));
+    return jsonUrl;
   }
   writeMetaData(JSON.stringify(metadataList, null, 2));
 };

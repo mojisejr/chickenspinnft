@@ -5,11 +5,10 @@ const { NETWORK } = require(`${basePath}/constants/network.js`);
 const network = NETWORK.eth;
 
 // General metadata for Ethereum
-const namePrefix = "PunkKub";
-const description = `PunkKub คือ functional NFT pixel art profile picture ที่ไม่ซ้ำกันเลยจำนวน 2,222 รูป. มีระด้บความหายากถึง 5 ระดับ
-common, rare, epic, legendary และสุดยอด dark ที่มีเพียง 12 ตัวใน collection เท่านั้น พวกเขายังมีความสามารถพื้นฐานในการใช้รับส่วนลด และ รับ
-สิทธิพิเศษต่างๆ จากการเกมส์ ต่างๆ ในอนาตตได้อีกมากมาย !
-`;
+const namePrefix = "Your NFT name here";
+const description = "NFT Collection Description here";
+// const description =
+//   "KPunk Hooligan Limited Edition Collection NFT Pixel art profile picture ที่ไม่ซ้ำกันเลย. มีระดับความหายาก 5 ระดับคือ Normal, Rare, Super Rare, Super Special Rare, Ultra Rare";
 const baseUri = "ipfs://";
 
 const solanaMetadata = {
@@ -24,19 +23,29 @@ const solanaMetadata = {
   ],
 };
 
+//Place layer folder name here
+const commonConfig = [
+  { name: "Bg 1" },
+  { name: "Back 2" },
+  { name: "Crest 3" },
+  { name: "Type 4" },
+  { name: "Tattoo 5" },
+  { name: "Neck 6" },
+  { name: "Body 7" },
+  { name: "Mouth 8" },
+  { name: "Scarf 9" },
+  { name: "Eyes 10" },
+  { name: "Head 11" },
+  { name: "Tag 12" },
+  // { name: "Item 13" },
+];
+
 // If you have selected Solana then the collection starts from 0 automatically
 const layerConfigurations = [
   {
-    growEditionSizeTo: 300,
-    layersOrder: [
-      { name: "Background" },
-      { name: "Skin" },
-      { name: "Eyes" },
-      { name: "Suits" },
-      { name: "Mouths" },
-      { name: "Hats" },
-      { name: "Earrings" },
-    ],
+    //how many nft do you want to generate ?
+    growEditionSizeTo: 10,
+    layersOrder: commonConfig,
   },
 ];
 
@@ -45,8 +54,8 @@ const shuffleLayerConfigurations = false;
 const debugLogs = false;
 
 const format = {
-  width: 1080,
-  height: 1080,
+  width: 750,
+  height: 750,
   smoothing: true,
 };
 
@@ -65,7 +74,7 @@ const text = {
   yGap: 40,
   align: "left",
   baseline: "top",
-  weight: "regular",
+  weight: "bold",
   family: "Courier",
   spacer: " => ",
 };
@@ -75,32 +84,13 @@ const pixelFormat = {
 };
 
 const background = {
-  generate: true,
+  generate: false,
   brightness: "90%",
   static: false,
   default: "#000000",
 };
 
-const extraMetadata = {
-  attributes: [
-    {
-      trait_type: "str",
-      value: 3,
-    },
-    {
-      trait_type: "agi",
-      value: 9,
-    },
-    {
-      trait_type: "vit",
-      value: 1,
-    },
-    {
-      trait_type: "int",
-      value: 3,
-    },
-  ],
-};
+const extraMetadata = {};
 
 const rarityDelimiter = "#";
 

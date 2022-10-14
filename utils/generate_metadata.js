@@ -15,6 +15,7 @@ const { randomInt } = require("crypto");
 const canvas = createCanvas(format.width, format.height);
 const ctx = canvas.getContext("2d");
 const metadataList = [];
+const csvtojson = require("csvtojson/v2");
 
 const buildSetup = () => {
   if (fs.existsSync(buildDir)) {
@@ -57,75 +58,20 @@ const draw = (_imgObject) => {
   ctx.drawImage(_imgObject.loadedImage, 0, 0, w, h);
 };
 
-const addRarity = () => {
-  const str = randomStatusFor(3);
-  const agi = randomStatusFor(3);
-  const vit = randomStatusFor(3);
-  const int = randomStatusFor(3);
-
-  const rarityObject = [
-    {
-      trait_type: "STR",
-      value: str,
-    },
-    {
-      trait_type: "AGI",
-      value: agi,
-    },
-    {
-      trait_type: "VIT",
-      value: vit,
-    },
-    {
-      trait_type: "INT",
-      value: int,
-    },
-  ];
-
-  console.log("random status object", rarityObject);
-
-  return rarityObject;
-};
-
-const randomStatusFor = (rarity) => {
-  //0 = common
-  //1 = rare
-  //2 = epic
-  //3 = legendary
-  //4 = dark
-  switch (rarity) {
-    case 0: {
-      return randomIntFromInterval(1, 3);
-    }
-    case 1: {
-      return randomIntFromInterval(1, 5);
-    }
-    case 2: {
-      return randomIntFromInterval(2, 7);
-    }
-    case 3: {
-      return randomIntFromInterval(2, 9);
-    }
-    case 4: {
-      return randomIntFromInterval(3, 9);
-    }
-  }
-};
-
-//random number
 const randomIntFromInterval = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
-const isNeighborColor = (color1, color2, tolerance) => {
-  return (
-    Math.abs(color1.r - color2.r) <= tolerance &&
-    Math.abs(color1.g - color2.g) <= tolerance &&
-    Math.abs(color1.b - color2.b) <= tolerance
-  );
+const generateBaseURI = async (tokenId) => {
+  const csvFilePath = `${basePath}/gasha5.csv`;
+  const jsonArray = await csvtojson().fromFile(csvFilePath);
+  const tokenData = jsonArray.find((obj) => {
+    return tokenId == obj.name.split(".")[0];
+  });
+  return tokenData.path;
 };
 
-const saveMetadata = (_loadedImageObject) => {
+const saveMetadata = async (_loadedImageObject) => {
   let shortName = _loadedImageObject.imgObject.filename.replace(
     /\.[^/.]+$/,
     ""
@@ -139,9 +85,7 @@ const saveMetadata = (_loadedImageObject) => {
     description: description,
     image: `${baseUri}/${shortName}.png`,
     edition: Number(shortName),
-    attributes: tempAttributes,
-    hash_tags: ["PunkKub", "PunkKubNFT", "BITKUB", "Pixel art"],
-    compiler: "PunkKub Compiler V1.0",
+    hash_tags: ["BitkubNFT"],
   };
 
   fs.writeFileSync(
