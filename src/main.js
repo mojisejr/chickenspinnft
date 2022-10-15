@@ -349,9 +349,6 @@ const startCreating = async (tokenId) => {
   let useableDna = false;
   let hashedDna = null;
   let newDna = null;
-  debugLogs
-    ? console.log("Editions left to create: ", abstractedIndexes)
-    : null;
 
   //@DEV: check if token is existed!?
   const canMint = await checkTokenId(tokenId);
@@ -369,7 +366,7 @@ const startCreating = async (tokenId) => {
     hashedDna = sha1(newDna);
     let dnaNotExist = await checkDNA(hashedDna);
     if (dnaNotExist) {
-      console.log("found usable dna: ", hashedDna);
+      console.log(`DNA checking: found usable DNA: ${hashedDna}`);
       useableDna = true;
     }
   }
@@ -399,30 +396,22 @@ const startCreating = async (tokenId) => {
           );
         });
 
-        debugLogs
-          ? console.log("Editions left to create: ", abstractedIndexes)
-          : null;
-
         saveImage(tokenId);
         //@DEV: PINATA FILE ADDING
         //1. Pin Image to PINATA
         const { imageUrl } = await pinImageToPinata(tokenId);
-        // const { imageUrl } = await pinImageBufferToPinata(
-        //   tokenId,
-        //   canvas.toBuffer("image/png")
-        // );
         //2. Get Image URL back and Build Metadata
         const metadata = addMetadata(newDna, tokenId, imageUrl);
         //3. Pin Json to PINATA
         const { jsonUrl } = await pinMetadataToPinata(tokenId, metadata);
         //4. return jsonURL back to etherjs
-        console.log(jsonUrl);
-        console.log(`Created edition: ${tokenId}, with DNA: ${sha1(newDna)}`);
-        saveMetaDataSingleFile(tokenId);
+        console.log(`image builder: json url of ${tokenId} [${jsonUrl}]`);
+        console.log(`created edition: ${tokenId}, with DNA: ${sha1(newDna)}`);
+        // saveMetaDataSingleFile(tokenId);
         return jsonUrl;
       }
     );
-    dnaList.add(filterDNAOptions(newDna));
+    // dnaList.add(filterDNAOptions(newDna));
     return jsonUrl;
   }
   writeMetaData(JSON.stringify(metadataList, null, 2));

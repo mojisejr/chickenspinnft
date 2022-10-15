@@ -19,7 +19,7 @@ async function checkTokenId(tokenId) {
         id: tokenId,
       },
     });
-    console.log("token ", found);
+    console.log(`checkTokenId: ${tokenId} has dupliacted id`);
     if (!found) {
       return true;
     }
@@ -36,11 +36,12 @@ async function checkDNA(dna) {
         dna: dna,
       },
     });
-    console.log("dna ", found);
     if (!found) {
       return true;
+    } else {
+      console.log("checkDNA: found duplicated id = ", found.dataValues.id);
+      return false;
     }
-    return false;
   } catch (e) {
     return false;
   }

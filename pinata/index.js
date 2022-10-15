@@ -33,7 +33,7 @@ async function pinImageBufferToPinata(tokenId, buffer) {
   };
   const stream = Readable.from(buffer);
   const result = await pinata.pinFileToIPFS(stream, options).catch((e) => {
-    console.log(e);
+    console.log("pinata: PINNING FILE FAILED: ", e.message);
   });
   const mapped = {
     ...result,
@@ -44,12 +44,13 @@ async function pinImageBufferToPinata(tokenId, buffer) {
 
 async function pinImageToPinata(tokenId) {
   const imageStream = await readImageOf(tokenId);
-  const result = await pinata.pinFileToIPFS(imageStream);
+  const result = await pinata.pinFileToIPFS(imageStream).catch((e) => {
+    console.log("pinata: PINNING IMAGE FAILED: ", e.message);
+  });
   const mapped = {
     ...result,
     imageUrl: `${basePinataUrl}/${result.IpfsHash}`,
   };
-  //   console.log(mapped);
   return mapped;
 }
 
@@ -62,7 +63,9 @@ async function pinMetadataToPinata(tokenId, metadata) {
       cidVersion: 0,
     },
   };
-  const result = await pinata.pinJSONToIPFS(metadata, options);
+  const result = await pinata.pinJSONToIPFS(metadata, options).catch((e) => {
+    console.log("pinata: PINNING FILE FAILED: ", e.message);
+  });
   const mapped = {
     result,
     jsonUrl: `${basePinataUrl}/${result.IpfsHash}`,

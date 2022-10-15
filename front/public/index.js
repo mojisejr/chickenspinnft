@@ -11,7 +11,7 @@ let _contract;
 //Contracts
 //https://mumbai.polygonscan.com/address/0xe5B8b548B98F924336aC64a8B747Db212a62cBcA#code
 // const rpc = "https://rpc-testnet.bitkubchain.io";
-const contractAddress = "0xe5B8b548B98F924336aC64a8B747Db212a62cBcA";
+const contractAddress = "0x541cD7Fe43C02D8f1c1D53B8dfD222A924910919";
 const abi = ["function mint() public"];
 
 //EVENTS
@@ -25,6 +25,9 @@ async function onPageLoad() {
     _ethereum = window.ethereum;
   }
 
+  fetch("https://chickenspinnft-service.onrender.com/").then((result) => {
+    console.log("result", result);
+  });
   _provider = new ethers.providers.Web3Provider(_ethereum);
   const address = _signer === undefined ? false : _signer.getAddress();
   if (address) {
