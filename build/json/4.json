@@ -1,10 +1,10 @@
 {
-  "name": "Your NFT name here #1",
+  "name": "Your NFT name here #4",
   "description": "NFT Collection Description here",
-  "image": "https://gateway.pinata.cloud/ipfs/QmW7yrygciiENY3QPsRAU19PHpkL1SbPF1AdoTLtuLquxZ",
-  "dna": "5a92391758c278a04bd1415caca3e6823c16fadf",
-  "edition": "1",
-  "date": 1665717331709,
+  "image": "https://gateway.pinata.cloud/ipfs/QmWBuAWmpx256w4Q74MP5BWzudSaqdnhLAgMrYJRztQjJx",
+  "dna": "97d1049cc8f977992ef182a49380401a3bb5ff40",
+  "edition": "4",
+  "date": 1665764805897,
   "attributes": [
     {
       "trait_type": "Bg 1",
@@ -32,7 +32,7 @@
     },
     {
       "trait_type": "Body 7",
-      "value": "BODY_2"
+      "value": "BODY_3"
     },
     {
       "trait_type": "Mouth 8",
