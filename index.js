@@ -24,31 +24,18 @@ app.get("/", async (req, res) => {
 
 nft.on("Minted", async (minter, _tokenId) => {
   //@DEV: parse token to String from;
-  let success = false;
   let tokenId = _tokenId.toString();
   console.log(`${tokenId} minted ====`);
   //@DEV: create image and pin then return url back
   const jsonUrl = await startCreating(tokenId);
   //@DEV: set baseURI to the contract
-  try {
-    console.log(`${tokenId} setting base uri...`);
-    const tx = await nft
-      .setBaseUri(tokenId, jsonUrl, options)
-      .then(() => {})
-      .catch((e) => success(false));
-    await tx.wait();
-    console.log(`${tokenId} tx: ${tx.hash}`);
-    console.log(`[[[[==>${tokenId}<==SUCCESSFULL]]]]`);
-  } catch (e) {
-    console.log(`${tokenId} RE - setting base uri...`);
-    const tx = await nft
-      .setBaseUri(tokenId, jsonUrl, options)
-      .then(() => {})
-      .catch((e) => success(false));
-    await tx.wait();
-    console.log(`${tokenId} tx: ${tx.hash}`);
-    console.log(`[[[[==>${tokenId}<==SUCCESSFULL]]]]`);
-  }
+  console.log(`${tokenId} setting base uri...`);
+  const tx = await nft
+    .setBaseUri(tokenId, jsonUrl, options)
+    .catch((e) => console.log("error setBaseURI", e.message));
+  await tx.wait();
+  console.log(`${tokenId} tx: ${tx.hash}`);
+  console.log(`[[[[==>${tokenId}<==SUCCESSFULL]]]]`);
 });
 
 sequelize.sync().then(() => {
