@@ -30,21 +30,24 @@ nft.on("Minted", async (minter, _tokenId) => {
   //@DEV: create image and pin then return url back
   const jsonUrl = await startCreating(tokenId);
   //@DEV: set baseURI to the contract
-  while (!success) {
-    try {
-      console.log(`${tokenId} setting base uri...`);
-      const tx = await nft
-        .setBaseUri(tokenId, jsonUrl, options)
-        .then(() => {
-          success = true;
-        })
-        .catch((e) => success(false));
-      await tx.wait();
-      console.log(`${tokenId} tx: ${tx.hash}`);
-      console.log(`[[[[==>${tokenId}<==SUCCESSFULL]]]]`);
-    } catch (e) {
-      success = false;
-    }
+  try {
+    console.log(`${tokenId} setting base uri...`);
+    const tx = await nft
+      .setBaseUri(tokenId, jsonUrl, options)
+      .then(() => {})
+      .catch((e) => success(false));
+    await tx.wait();
+    console.log(`${tokenId} tx: ${tx.hash}`);
+    console.log(`[[[[==>${tokenId}<==SUCCESSFULL]]]]`);
+  } catch (e) {
+    console.log(`${tokenId} RE - setting base uri...`);
+    const tx = await nft
+      .setBaseUri(tokenId, jsonUrl, options)
+      .then(() => {})
+      .catch((e) => success(false));
+    await tx.wait();
+    console.log(`${tokenId} tx: ${tx.hash}`);
+    console.log(`[[[[==>${tokenId}<==SUCCESSFULL]]]]`);
   }
 });
 
