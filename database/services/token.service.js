@@ -19,11 +19,12 @@ async function checkTokenId(tokenId) {
         id: tokenId,
       },
     });
-    console.log(`checkTokenId: ${tokenId} has dupliacted id`);
     if (!found) {
       return true;
+    } else {
+      console.log(`checkTokenId: ${tokenId} has dupliacted id`);
+      return false;
     }
-    return false;
   } catch (e) {
     return false;
   }
@@ -39,7 +40,10 @@ async function checkDNA(dna) {
     if (!found) {
       return true;
     } else {
-      console.log("checkDNA: found duplicated id = ", found.dataValues.id);
+      console.log(
+        "checkDNA: found duplicated with tokenId: ",
+        found.dataValues.id
+      );
       return false;
     }
   } catch (e) {

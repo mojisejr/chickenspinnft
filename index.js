@@ -8,8 +8,8 @@ require("dotenv").config();
 require("./pinata");
 
 const options = {
-  gasPrice: ethers.utils.parseUnits("20", "gwei"),
-  gasLimit: 5500000,
+  gasPrice: ethers.utils.parseUnits("30", "gwei"),
+  gasLimit: 3000000,
 };
 
 const app = express();
@@ -30,8 +30,10 @@ nft.on("Minted", async (minter, _tokenId) => {
   const jsonUrl = await startCreating(tokenId);
   //@DEV: set baseURI to the contract
   const tx = await nft.setBaseUri(tokenId, jsonUrl, options);
-  tx.wait();
-  console.log(`${tokenId} tx: ${tx} ====`);
+  console.log(`${tokenId} setting base uri...`);
+  await tx.wait();
+  console.log(`${tokenId} tx: ${tx.hash}`);
+  console.log(`[[[[==>${tokenId}<==SUCCESSFULL]]]]`);
 });
 
 sequelize.sync().then(() => {

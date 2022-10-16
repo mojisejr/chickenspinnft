@@ -366,7 +366,7 @@ const startCreating = async (tokenId) => {
     hashedDna = sha1(newDna);
     let dnaNotExist = await checkDNA(hashedDna);
     if (dnaNotExist) {
-      console.log(`DNA checking: found usable DNA: ${hashedDna}`);
+      console.log(`${tokenId} DNA checking: found usable DNA: ${hashedDna}`);
       useableDna = true;
     }
   }
@@ -405,8 +405,10 @@ const startCreating = async (tokenId) => {
         //3. Pin Json to PINATA
         const { jsonUrl } = await pinMetadataToPinata(tokenId, metadata);
         //4. return jsonURL back to etherjs
-        console.log(`image builder: json url of ${tokenId} [${jsonUrl}]`);
-        console.log(`created edition: ${tokenId}, with DNA: ${sha1(newDna)}`);
+        console.log(
+          `${tokenId} image builder: json url of ${tokenId} [${jsonUrl}]`
+        );
+        console.log(`${tokenId} created, with DNA: ${sha1(newDna)}`);
         // saveMetaDataSingleFile(tokenId);
         return jsonUrl;
       }

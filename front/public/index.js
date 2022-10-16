@@ -11,8 +11,8 @@ let _contract;
 //Contracts
 //https://mumbai.polygonscan.com/address/0xe5B8b548B98F924336aC64a8B747Db212a62cBcA#code
 // const rpc = "https://rpc-testnet.bitkubchain.io";
-const contractAddress = "0x541cD7Fe43C02D8f1c1D53B8dfD222A924910919";
-const abi = ["function mint() public"];
+const contractAddress = "0xd0419C6d90B589fb61977B9764C55adF60693F35";
+const abi = ["function mint() public payable"];
 
 //EVENTS
 window.addEventListener("load", onPageLoad);
@@ -51,6 +51,8 @@ async function onConnect() {
 }
 
 async function onMint() {
-  const tx = await _contract.mint();
+  const tx = await _contract.mint({
+    value: ethers.utils.parseUnits("0.001", "ether"),
+  });
   alert(`ไปดูไก่ที่ opensea ${tx.hash}`);
 }
