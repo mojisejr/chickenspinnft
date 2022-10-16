@@ -32,12 +32,16 @@ nft.on("Minted", async (minter, _tokenId) => {
   //@DEV: set baseURI to the contract
   while (!success) {
     try {
-      const tx = await nft.setBaseUri(tokenId, jsonUrl, options);
       console.log(`${tokenId} setting base uri...`);
+      const tx = await nft
+        .setBaseUri(tokenId, jsonUrl, options)
+        .then(() => {
+          success = true;
+        })
+        .catch((e) => success(false));
       await tx.wait();
       console.log(`${tokenId} tx: ${tx.hash}`);
       console.log(`[[[[==>${tokenId}<==SUCCESSFULL]]]]`);
-      success = true;
     } catch (e) {
       success = false;
     }
