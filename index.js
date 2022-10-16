@@ -24,16 +24,24 @@ app.get("/", async (req, res) => {
 
 nft.on("Minted", async (minter, _tokenId) => {
   //@DEV: parse token to String from;
+  let success = false;
   let tokenId = _tokenId.toString();
   console.log(`${tokenId} minted ====`);
   //@DEV: create image and pin then return url back
   const jsonUrl = await startCreating(tokenId);
   //@DEV: set baseURI to the contract
-  const tx = await nft.setBaseUri(tokenId, jsonUrl, options);
-  console.log(`${tokenId} setting base uri...`);
-  await tx.wait();
-  console.log(`${tokenId} tx: ${tx.hash}`);
-  console.log(`[[[[==>${tokenId}<==SUCCESSFULL]]]]`);
+  while (!success) {
+    try {
+      const tx = await nft.setBaseUri(tokenId, jsonUrl, options);
+      console.log(`${tokenId} setting base uri...`);
+      await tx.wait();
+      console.log(`${tokenId} tx: ${tx.hash}`);
+      console.log(`[[[[==>${tokenId}<==SUCCESSFULL]]]]`);
+      success = true;
+    } catch (e) {
+      success = false;
+    }
+  }
 });
 
 sequelize.sync().then(() => {
