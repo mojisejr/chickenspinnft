@@ -8,7 +8,7 @@ require("dotenv").config();
 require("./pinata");
 
 const options = {
-  gasPrice: ethers.utils.parseUnits("30", "gwei"),
+  gasPrice: ethers.utils.parseUnits("50", "gwei"),
   gasLimit: 3000000,
 };
 

@@ -1,0 +1,17 @@
+{
+  "name": "Your NFT name here #1",
+  "description": "NFT Collection Description here",
+  "image": "https://gateway.pinata.cloud/ipfs/QmQRq23USk1JjqcAd9bvMNMVVJ3vPZwqPdbLVAJT5kFrZk",
+  "dna": "ecb584805947b83e765f71d06a0a71e3c96fff49",
+  "edition": "1",
+  "date": 1665985059833,
+  "attributes": [
+    { "trait_type": "Background", "value": "BG_ grassland_jay." },
+    { "trait_type": "Face", "value": "face_onFire_DOSE" },
+    { "trait_type": "Lower", "value": "lower_boxerPants_DOSE" },
+    { "trait_type": "Upper", "value": "upper_astronaut_purbin" },
+    { "trait_type": "Head", "value": "Head_octopus_god" },
+    { "trait_type": "Pet", "value": "IMG_5629 (3)" }
+  ],
+  "creator": "N"
+}
