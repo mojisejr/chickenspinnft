@@ -24,28 +24,19 @@ const solanaMetadata = {
 };
 
 //Place layer folder name here
-// const commonConfig = [
-//   { name: "Bg 1" },
-//   { name: "Back 2" },
-//   { name: "Crest 3" },
-//   { name: "Type 4" },
-//   { name: "Tattoo 5" },
-//   { name: "Neck 6" },
-//   { name: "Body 7" },
-//   { name: "Mouth 8" },
-//   { name: "Scarf 9" },
-//   { name: "Eyes 10" },
-//   { name: "Head 11" },
-//   { name: "Tag 12" },
-//   // { name: "Item 13" },
-// ];
 const commonConfig = [
-  { name: "Background" },
-  { name: "Face" },
-  { name: "Lower" },
-  { name: "Upper" },
+  { name: "Bg" },
+  { name: "Prop" },
+  { name: "Crest" },
+  { name: "Type" },
+  { name: "Tattoo" },
+  { name: "Neck" },
+  { name: "Body" },
+  { name: "Mouth" },
+  { name: "Scarf" },
+  { name: "Eyes" },
   { name: "Head" },
-  { name: "Pet" },
+  { name: "Tag" },
 ];
 
 // If you have selected Solana then the collection starts from 0 automatically

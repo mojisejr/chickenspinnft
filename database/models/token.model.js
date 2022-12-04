@@ -16,6 +16,15 @@ Token.init(
       allowNull: false,
       unique: true,
     },
+    tokenURI: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: true,
+    },
+    completed: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
   },
   {
     sequelize,

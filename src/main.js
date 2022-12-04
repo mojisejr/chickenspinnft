@@ -35,6 +35,12 @@ var dnaList = new Set();
 const DNA_DELIMITER = "-";
 const HashlipsGiffer = require(`${basePath}/modules/HashlipsGiffer.js`);
 
+const {
+  storeImage,
+  storeNFT,
+  storeImageBlob,
+} = require("../nftStorage/index.js");
+
 //CUSTOM
 const {
   addMintedToken,
@@ -396,24 +402,21 @@ const startCreating = async (tokenId) => {
           );
         });
 
-        saveImage(tokenId);
         //@DEV: PINATA FILE ADDING
-        //1. Pin Image to PINATA
-        const { imageUrl } = await pinImageToPinata(tokenId);
+        //1. Pin Image to IPFS
+        const imageUrl = await storeImageBlob(canvas.toBuffer("image/png"));
         //2. Get Image URL back and Build Metadata
         const metadata = addMetadata(newDna, tokenId, imageUrl);
-        //3. Pin Json to PINATA
-        const { jsonUrl } = await pinMetadataToPinata(tokenId, metadata);
+        //3. Pin Json to IPFS
+        const jsonUrl = await storeNFT(metadata);
         //4. return jsonURL back to etherjs
         console.log(
           `${tokenId} image builder: json url of ${tokenId} [${jsonUrl}]`
         );
         console.log(`${tokenId} created, with DNA: ${sha1(newDna)}`);
-        // saveMetaDataSingleFile(tokenId);
         return jsonUrl;
       }
     );
-    // dnaList.add(filterDNAOptions(newDna));
     return jsonUrl;
   }
   writeMetaData(JSON.stringify(metadataList, null, 2));
