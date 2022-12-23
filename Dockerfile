@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:18-alpine
 WORKDIR /chickenspin
 COPY package.json ./
 #  add libraries; sudo so non-root user added downstream can get sudo

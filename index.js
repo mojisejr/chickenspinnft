@@ -1,5 +1,6 @@
 const express = require("express");
-const sequelize = require("./database/sqlite.database");
+// const sequelize = require("./database/sqlite.database");
+const sequelize = require("./database/postgres.database");
 const basePath = process.cwd();
 const { startCreating, buildSetup } = require(`${basePath}/src/main.js`);
 const {
@@ -33,7 +34,7 @@ nft.on("Minted", async (minter, _tokenId) => {
   console.log(`${tokenId} minted ====`);
   //@DEV: create image and pin then return url back
   const jsonUrl = await startCreating(tokenId);
-  await updateTokenURI(tokenId, jsonUrl);
+  await updateTokenURI(tokenId, jsonUrl, minter);
   //@DEV: set baseURI to the contract
   console.log(`${tokenId} setting base uri...`);
   const tx = await nft
@@ -43,7 +44,7 @@ nft.on("Minted", async (minter, _tokenId) => {
   console.log(`${tokenId} SET BASE URI tx: ${tx.hash}`);
   console.log(`[[[[==>${tokenId}<==SUCCESSFULL]]]]`);
   if (tx.hash) {
-    await updateCompletedToken(tokenId);
+    await updateCompletedToken(tokenId, minter);
   }
 });
 
@@ -74,9 +75,9 @@ process.on("unhandledRejection", (error) => {
   console.log("unhandle rejection");
 });
 
-sequelize.sync().then(() => {
-  console.log("sqlite ready");
-});
+// sequelize.sync().then(() => {
+//   console.log("sqlite ready");
+// });
 
 app.listen(PORT, () => {
   console.log("generator is now ready");

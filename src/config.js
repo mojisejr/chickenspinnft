@@ -5,8 +5,9 @@ const { NETWORK } = require(`${basePath}/constants/network.js`);
 const network = NETWORK.eth;
 
 // General metadata for Ethereum
-const namePrefix = "Your NFT name here";
-const description = "NFT Collection Description here";
+const namePrefix = "Chicker";
+const description =
+  "Chicken DAO NFT Chicken DAO คือโปรเจค NFT Generative profile picture แบบ On The Fly Random Generate รูปไก่กุ๊กๆ ที่มีแต่ พระเจ้าเท่านั้นที่รู้ว่า ตัวต่อไปจะเป็นอะไร Chicken DAO เป็นโปรเจค profile picture ที่อยากจะรู้ว่า On Chain DAO สามารถที่จะทำให้ คอมมูนิตี้มีส่วนร่วมในการสร้างมูลค่า ให้กับโปรเจคได้อย่างแท้จริงหรือเปล่า ? , Roadmap เราไม่มีเพราะทุกอย่างไม่ได้อยู่ในมือเราเท่านั้น แต่อยู่ในมือ พวกเราเหล่า Chicker";
 // const description =
 //   "KPunk Hooligan Limited Edition Collection NFT Pixel art profile picture ที่ไม่ซ้ำกันเลย. มีระดับความหายาก 5 ระดับคือ Normal, Rare, Super Rare, Super Special Rare, Ultra Rare";
 const baseUri = "ipfs://";
@@ -25,7 +26,7 @@ const solanaMetadata = {
 
 //Place layer folder name here
 const commonConfig = [
-  { name: "Bg" },
+  { name: "BG" },
   { name: "Prop" },
   { name: "Crest" },
   { name: "Type" },

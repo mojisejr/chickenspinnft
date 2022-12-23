@@ -33,6 +33,7 @@
     "express": "^4.18.2",
     "gif-encoder-2": "^1.0.5",
     "nft.storage": "^7.0.0",
+    "pg": "^8.8.0",
     "sequelize": "^6.25.0",
     "sha1": "^1.1.1",
     "sqlite3": "^5.1.2"

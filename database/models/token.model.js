@@ -1,34 +1,42 @@
 const { Model, DataTypes } = require("sequelize");
-const sequelize = require("../sqlite.database");
+const sequelize = require("../postgres.database");
 
 class Token extends Model {}
 
 Token.init(
   {
     id: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       allowNull: false,
       unique: true,
     },
     dna: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       allowNull: false,
       unique: true,
     },
     tokenURI: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(255),
       allowNull: true,
       unique: true,
     },
+    minter: {
+      type: DataTypes.STRING(255),
+    },
     completed: {
       type: DataTypes.BOOLEAN,
+      defaultValue: false,
       allowNull: false,
+    },
+    timestamp: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: new Date().getTime(),
     },
   },
   {
     sequelize,
-    modelName: "token",
   }
 );
 

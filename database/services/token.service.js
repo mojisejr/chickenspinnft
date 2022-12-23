@@ -27,14 +27,17 @@ async function getBaseUriOf(tokenId) {
   }
 }
 
-async function updateTokenURI(tokenId, tokenURI) {
-  const result = await Token.update({ tokenURI }, { where: { id: tokenId } });
+async function updateTokenURI(tokenId, tokenURI, minter) {
+  const result = await Token.update(
+    { tokenURI, minter },
+    { where: { id: tokenId } }
+  );
   console.log("update token", result);
 }
 
-async function updateCompletedToken(tokenId) {
+async function updateCompletedToken(tokenId, minter) {
   const result = await Token.update(
-    { completed: true },
+    { minter, completed: true, timestamp: new Date().getTime() },
     { where: { id: tokenId } }
   );
   console.log("updateCompleted ", result);
